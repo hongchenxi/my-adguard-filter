@@ -1,6 +1,5 @@
 [Adblock Plus 2.0]
 ! Title: My AdGuard Private Filter
-! Version: {{VERSION}}
 ! Last modified: {{LAST_MODIFIED}}
 ! Expires: 3 days
 ! Homepage: https://github.com/hongchenxi/my-adguard-filter

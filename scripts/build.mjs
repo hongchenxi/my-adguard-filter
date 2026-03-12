@@ -33,20 +33,22 @@ function formatVersion(date) {
 }
 
 function formatLastModified(date) {
-  const formatter = new Intl.DateTimeFormat("en-GB", {
+  const formatter = new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Bangkok",
+    weekday: "short",
     day: "2-digit",
     month: "short",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+    second: "2-digit",
     hour12: false,
   });
 
   const parts = formatter.formatToParts(date);
   const map = Object.fromEntries(parts.map((p) => [p.type, p.value]));
 
-  return `${map.day} ${map.month} ${map.year} ${map.hour}:${map.minute}`;
+  return `${map.weekday}, ${map.day} ${map.month} ${map.year} ${map.hour}:${map.minute}:${map.second} +0700`;
 }
 
 function readHeader() {
