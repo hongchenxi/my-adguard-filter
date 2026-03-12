@@ -1,6 +1,6 @@
 [Adblock Plus 2.0]
 ! Title: My AdGuard Private Filter
-! Last modified: Thu, 12 Mar 2026 16:35:24 +0700
+! Last modified: Thu, 12 Mar 2026 16:38:01 +0700
 ! Expires: 3 days
 ! Homepage: https://github.com/hongchenxi/my-adguard-filter
 ! License: MIT
