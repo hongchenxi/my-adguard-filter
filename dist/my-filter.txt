@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
 ! Title: My AdGuard Private Filter
-! Version: 202603121608
-! Last modified: 12 Mar 2026 16:08 +0800
+! Version: 202603120846
+! Last modified: 12 Mar 2026 08:46 +0800
 ! Expires: 3 days
 ! Homepage: https://github.com/hongchenxi/my-adguard-filter
 ! License: MIT
@@ -21,6 +21,10 @@
 123hdtv.com###banner_pmid
 123hdtv.com###banner_plow
 123hdtv.com###content > div.clearfix.wrap-content > div.htmlwrap.clearfix
+
+baan-series.org###before-player-ads
+baan-series.org###after-player-ads
+baan-series.org##div.tt_bfx
 
 !#if ext_ublock
 !#include ublock.txt
