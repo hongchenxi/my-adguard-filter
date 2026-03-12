@@ -26,22 +26,19 @@ function formatDateForVersion(date) {
 }
 
 function formatDateForHeader(date) {
-  const pad = (n) => String(n).padStart(2, "0");
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  return `${pad(date.getDate())} ${months[date.getMonth()]} ${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())} +0800`;
+  const formatter = new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  const parts = formatter.formatToParts(date);
+  const map = Object.fromEntries(parts.map((p) => [p.type, p.value]));
+
+  return `${map.day} ${map.month} ${map.year} ${map.hour}:${map.minute}`;
 }
 
 function readHeader() {
