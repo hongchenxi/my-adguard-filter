@@ -7,3 +7,6 @@
 25-hd.com###primary div.main-movie > div.banner
 
 123hdtv.com###banner_top
+123hdtv.com###banner_pmid
+123hdtv.com###banner_plow
+123hdtv.com###content > div.clearfix.wrap-content > div.htmlwrap.clearfix
