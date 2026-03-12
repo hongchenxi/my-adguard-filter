@@ -15,8 +15,8 @@ function ensureDir(dir) {
   }
 }
 
-function formatVersion(date) {
-  const formatter = new Intl.DateTimeFormat("sv-SE", {
+function getBangkokParts(date) {
+  const formatter = new Intl.DateTimeFormat("en-GB", {
     timeZone: "Asia/Bangkok",
     year: "numeric",
     month: "2-digit",
@@ -27,28 +27,29 @@ function formatVersion(date) {
   });
 
   const parts = formatter.formatToParts(date);
-  const map = Object.fromEntries(parts.map((p) => [p.type, p.value]));
+  return Object.fromEntries(parts.map((p) => [p.type, p.value]));
+}
 
+function formatVersion(date) {
+  const map = getBangkokParts(date);
   return `${map.year}${map.month}${map.day}${map.hour}${map.minute}`;
 }
 
 function formatLastModified(date) {
   const formatter = new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Bangkok",
-    weekday: "short",
     day: "2-digit",
     month: "short",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
     hour12: false,
   });
 
   const parts = formatter.formatToParts(date);
   const map = Object.fromEntries(parts.map((p) => [p.type, p.value]));
 
-  return `${map.weekday}, ${map.day} ${map.month} ${map.year} ${map.hour}:${map.minute}:${map.second} +0700`;
+  return `${map.day} ${map.month} ${map.year} ${map.hour}:${map.minute} +0700`;
 }
 
 function readHeader() {
@@ -56,8 +57,8 @@ function readHeader() {
   const header = fs.readFileSync(headerPath, "utf8");
 
   return header
-    .replaceAll("{{VERSION}}", formatVersion(now))
-    .replaceAll("{{LAST_MODIFIED}}", formatLastModified(now));
+    .replaceAll("%{version}", formatVersion(now))
+    .replaceAll("%{last_modified}", formatLastModified(now));
 }
 
 function getCategoryFiles() {
@@ -89,7 +90,6 @@ function build() {
   const header = readHeader();
   const files = getCategoryFiles();
   const seenRules = new Set();
-
   const sections = [];
 
   for (const file of files) {
@@ -98,7 +98,6 @@ function build() {
     const lines = raw.split(/\r?\n/);
 
     const sectionLines = [];
-    let hasRealRule = false;
 
     for (const line of lines) {
       if (isEmpty(line)) continue;
@@ -110,22 +109,14 @@ function build() {
         continue;
       }
 
-      if (seenRules.has(normalized)) {
-        continue;
-      }
+      if (seenRules.has(normalized)) continue;
 
       seenRules.add(normalized);
       sectionLines.push(normalized);
-      hasRealRule = true;
     }
 
     if (sectionLines.length > 0) {
-      const block = [`! ===== ${file} =====`, ...sectionLines].join("\n");
-      sections.push(block);
-
-      if (!hasRealRule) {
-        console.warn(`Warning: ${file} has no actual rules, only comments.`);
-      }
+      sections.push(sectionLines.join("\n"));
     }
   }
 
