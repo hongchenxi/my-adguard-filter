@@ -1,12 +1,7 @@
 [Adblock Plus 2.0]
 ! Title: My AdGuard Private Filter
-<<<<<<< HEAD
-! Version: 202603120904
-! Last modified: 12 Mar 2026 09:04
-=======
-! Version: 202603121611
-! Last modified: 12 Mar 2026 16:11
->>>>>>> 77eacd0 (� build(build.mjs): improve filter generation and timestamp formatting)
+! Version: 202603121621
+! Last modified: 12 Mar 2026 16:21
 ! Expires: 3 days
 ! Homepage: https://github.com/hongchenxi/my-adguard-filter
 ! License: MIT
