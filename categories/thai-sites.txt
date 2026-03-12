@@ -1,0 +1,9 @@
+! Movie
+25-hd.com###page > div.banner
+25-hd.com###primary div.main-banner
+25-hd.com###box-player div.player-promo-box
+25-hd.com###secondary div.sidebar-banner-left
+25-hd.com###secondary div.sidebar-banner-right
+25-hd.com###primary div.main-movie > div.banner
+
+123hdtv.com###banner_top
