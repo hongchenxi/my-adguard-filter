@@ -8,25 +8,33 @@ const distDir = path.join(root, "dist");
 
 const headerPath = path.join(assetsDir, "header.txt");
 const outputPath = path.join(distDir, "my-filter.txt");
-const ublockPath = path.join(distDir, "ublock.txt");
 
 function ensureDir(dir) {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
 }
 
-function formatDateForVersion(date) {
-  const pad = (n) => String(n).padStart(2, "0");
-  return (
-    date.getFullYear() +
-    pad(date.getMonth() + 1) +
-    pad(date.getDate()) +
-    pad(date.getHours()) +
-    pad(date.getMinutes())
-  );
+function formatVersion(date) {
+  const formatter = new Intl.DateTimeFormat("sv-SE", {
+    timeZone: "Asia/Bangkok",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  const parts = formatter.formatToParts(date);
+  const map = Object.fromEntries(parts.map((p) => [p.type, p.value]));
+
+  return `${map.year}${map.month}${map.day}${map.hour}${map.minute}`;
 }
 
-function formatDateForHeader(date) {
+function formatLastModified(date) {
   const formatter = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Bangkok",
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -43,58 +51,89 @@ function formatDateForHeader(date) {
 
 function readHeader() {
   const now = new Date();
-  const version = formatDateForVersion(now);
-  const lastModified = formatDateForHeader(now);
+  const header = fs.readFileSync(headerPath, "utf8");
 
-  return fs
-    .readFileSync(headerPath, "utf8")
-    .replaceAll("{{VERSION}}", version)
-    .replaceAll("{{LAST_MODIFIED}}", lastModified);
+  return header
+    .replaceAll("{{VERSION}}", formatVersion(now))
+    .replaceAll("{{LAST_MODIFIED}}", formatLastModified(now));
 }
 
-function collectCategoryFiles() {
+function getCategoryFiles() {
+  if (!fs.existsSync(categoriesDir)) {
+    return [];
+  }
+
   return fs
     .readdirSync(categoriesDir)
-    .filter((name) => name.endsWith(".txt"))
-    .sort();
+    .filter((file) => file.endsWith(".txt"))
+    .sort((a, b) => a.localeCompare(b));
 }
 
-function buildMainFilter() {
-  const files = collectCategoryFiles();
-  const header = readHeader();
-
-  let body = "";
-  for (const file of files) {
-    if (file === "ublock.txt") continue;
-    const fullPath = path.join(categoriesDir, file);
-    const content = fs.readFileSync(fullPath, "utf8").trim();
-    if (!content) continue;
-    body += `\n! ===== ${file} =====\n`;
-    body += content + "\n";
-  }
-
-  const ublockDirective = `
-!#if ext_ublock
-!#include ublock.txt
-!#endif
-`.trim();
-
-  return `${header}\n\n${body}\n${ublockDirective}\n`;
+function isEmpty(line) {
+  return line.trim() === "";
 }
 
-function copyUblockFile() {
-  const src = path.join(categoriesDir, "ublock.txt");
-  if (fs.existsSync(src)) {
-    fs.copyFileSync(src, ublockPath);
-  }
+function isComment(line) {
+  return line.trim().startsWith("!");
 }
 
-function main() {
+function normalizeLine(line) {
+  return line.trim();
+}
+
+function build() {
   ensureDir(distDir);
-  const finalText = buildMainFilter();
-  fs.writeFileSync(outputPath, finalText, "utf8");
-  copyUblockFile();
-  console.log("Build complete:", outputPath);
+
+  const header = readHeader();
+  const files = getCategoryFiles();
+  const seenRules = new Set();
+
+  const sections = [];
+
+  for (const file of files) {
+    const filePath = path.join(categoriesDir, file);
+    const raw = fs.readFileSync(filePath, "utf8");
+    const lines = raw.split(/\r?\n/);
+
+    const sectionLines = [];
+    let hasRealRule = false;
+
+    for (const line of lines) {
+      if (isEmpty(line)) continue;
+
+      const normalized = normalizeLine(line);
+
+      if (isComment(normalized)) {
+        sectionLines.push(normalized);
+        continue;
+      }
+
+      if (seenRules.has(normalized)) {
+        continue;
+      }
+
+      seenRules.add(normalized);
+      sectionLines.push(normalized);
+      hasRealRule = true;
+    }
+
+    if (sectionLines.length > 0) {
+      const block = [`! ===== ${file} =====`, ...sectionLines].join("\n");
+      sections.push(block);
+
+      if (!hasRealRule) {
+        console.warn(`Warning: ${file} has no actual rules, only comments.`);
+      }
+    }
+  }
+
+  const output = [header, "", ...sections].join("\n\n").trim() + "\n";
+
+  fs.writeFileSync(outputPath, output, "utf8");
+
+  console.log(`Built: ${outputPath}`);
+  console.log(`Files: ${files.length}`);
+  console.log(`Unique rules: ${seenRules.size}`);
 }
 
-main();
+build();

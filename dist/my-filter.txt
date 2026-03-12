@@ -1,11 +1,16 @@
 [Adblock Plus 2.0]
 ! Title: My AdGuard Private Filter
+<<<<<<< HEAD
 ! Version: 202603120904
 ! Last modified: 12 Mar 2026 09:04
+=======
+! Version: 202603121611
+! Last modified: 12 Mar 2026 16:11
+>>>>>>> 77eacd0 (� build(build.mjs): improve filter generation and timestamp formatting)
 ! Expires: 3 days
 ! Homepage: https://github.com/hongchenxi/my-adguard-filter
 ! License: MIT
-! Support: https://github.com/hongchenxi/my-adguard-filter/issues
+
 
 
 ! ===== thai-sites.txt =====
@@ -16,16 +21,10 @@
 25-hd.com###secondary div.sidebar-banner-left
 25-hd.com###secondary div.sidebar-banner-right
 25-hd.com###primary div.main-movie > div.banner
-
 123hdtv.com###banner_top
 123hdtv.com###banner_pmid
 123hdtv.com###banner_plow
 123hdtv.com###content > div.clearfix.wrap-content > div.htmlwrap.clearfix
-
 baan-series.org###before-player-ads
 baan-series.org###after-player-ads
 baan-series.org##div.tt_bfx
-
-!#if ext_ublock
-!#include ublock.txt
-!#endif

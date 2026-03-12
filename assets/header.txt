@@ -5,4 +5,3 @@
 ! Expires: 3 days
 ! Homepage: https://github.com/hongchenxi/my-adguard-filter
 ! License: MIT
-! Support: https://github.com/hongchenxi/my-adguard-filter/issues
