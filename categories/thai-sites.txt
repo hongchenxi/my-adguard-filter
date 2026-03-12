@@ -9,7 +9,6 @@
 123hdtv.com###banner_top
 123hdtv.com###banner_pmid
 123hdtv.com###banner_plow
-123hdtv.com###content > div.clearfix.wrap-content > div.htmlwrap.clearfix
 
 baan-series.org###before-player-ads
 baan-series.org###after-player-ads
