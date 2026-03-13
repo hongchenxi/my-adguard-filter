@@ -13,3 +13,6 @@
 baan-series.org###before-player-ads
 baan-series.org###after-player-ads
 baan-series.org##div.tt_bfx
+
+goseries4k.com##div.vipx-item
+goseries4k.com##div:has(> div.vipx-item)
