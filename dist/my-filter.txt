@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
 ! Title: My AdGuard Private Filter
-! Version: 202603130019
-! Last modified: 13 Mar 2026 24:19 +0700
+! Version: 202603131042
+! Last modified: 13 Mar 2026 10:42 +0700
 ! Expires: 3 days
 ! Homepage: https://github.com/hongchenxi/my-adguard-filter
 ! License: MIT
@@ -21,3 +21,5 @@
 baan-series.org###before-player-ads
 baan-series.org###after-player-ads
 baan-series.org##div.tt_bfx
+goseries4k.com##div.vipx-item
+goseries4k.com##div:has(> div.vipx-item)
